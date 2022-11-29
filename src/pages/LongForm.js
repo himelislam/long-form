@@ -1,13 +1,41 @@
 import React, { useReducer } from "react";
-import { initialState, reducer } from "../state/formReducer";
 
 const LongForm = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const initialState = {
+    firstName : "",
+    lastName : "",
+    email : "",
+    gender : "",
+    education : "",
+    quantity : 0,
+    feedback : "",
+    term : false,
+  };
+
+  const reducer = (state, action) => {
+    switch(action.type){
+      case 'INPUT': 
+      return {
+        ...state,
+        [action.payload.name] : action.payload.value,
+      }
+
+      default: 
+      return state
+    }
+    // if(action.type === 'INPUT'){
+    //   return {
+    //     ...state,
+    //     [action.payload.name] : action.payload.value,
+    //   }
+    // }
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const submit = (event) => {
     event.preventDefault();
-
-    console.log(state);
+    console.log(state)
   };
 
   return (
@@ -24,12 +52,10 @@ const LongForm = () => {
             type='text'
             name='firstName'
             id='firstName'
-            onBlur={(e) =>
-              dispatch({
-                type: "INPUT",
-                payload: { name: e.target.name, value: e.target.value },
-              })
-            }
+            onBlur={(e)=> dispatch({
+              type : 'INPUT',
+              payload : {name : e.target.name, value : e.target.value}
+            })}
           />
         </div>
         <div className='flex flex-col w-full max-w-xs'>
@@ -40,12 +66,7 @@ const LongForm = () => {
             type='text'
             name='lastName'
             id='lastName'
-            onBlur={(e) =>
-              dispatch({
-                type: "INPUT",
-                payload: { name: e.target.name, value: e.target.value },
-              })
-            }
+            
           />
         </div>
         <div className='flex flex-col w-full max-w-xs'>
@@ -56,12 +77,7 @@ const LongForm = () => {
             type='email'
             name='email'
             id='email'
-            onBlur={(e) =>
-              dispatch({
-                type: "INPUT",
-                payload: { name: e.target.name, value: e.target.value },
-              })
-            }
+            
           />
         </div>
         <div className='flex flex-col w-full max-w-xs'>
@@ -73,12 +89,7 @@ const LongForm = () => {
                 id='male'
                 name='gender'
                 value='male'
-                onClick={(e) =>
-                  dispatch({
-                    type: "INPUT",
-                    payload: { name: e.target.name, value: e.target.value },
-                  })
-                }
+                
               />
               <label className='ml-2 text-lg' for='male'>
                 Male
@@ -90,12 +101,7 @@ const LongForm = () => {
                 id='female'
                 name='gender'
                 value='female'
-                onClick={(e) =>
-                  dispatch({
-                    type: "INPUT",
-                    payload: { name: e.target.name, value: e.target.value },
-                  })
-                }
+                
               />
               <label className='ml-2 text-lg' for='female'>
                 Female
@@ -107,12 +113,7 @@ const LongForm = () => {
                 id='other'
                 name='gender'
                 value='other'
-                onClick={(e) =>
-                  dispatch({
-                    type: "INPUT",
-                    payload: { name: e.target.name, value: e.target.value },
-                  })
-                }
+                
               />
               <label className='ml-2 text-lg' for='other'>
                 Other
@@ -127,12 +128,7 @@ const LongForm = () => {
           <select
             name='education'
             id='education'
-            onChange={(e) =>
-              dispatch({
-                type: "INPUT",
-                payload: { name: e.target.name, value: e.target.value },
-              })
-            }
+            
           >
             <option value='SSC'>SSC</option>
             <option value='HSC'>HSC</option>
@@ -163,12 +159,7 @@ const LongForm = () => {
             id='feedback'
             cols='30'
             rows='4'
-            onBlur={(e) =>
-              dispatch({
-                type: "INPUT",
-                payload: { name: e.target.name, value: e.target.value },
-              })
-            }
+            
           ></textarea>
         </div>
 
@@ -179,14 +170,12 @@ const LongForm = () => {
               type='checkbox'
               name='term'
               id='terms'
-              onClick={() => dispatch({ type: "TOGGLE" })}
             />
             <label for='terms'>I agree to terms and conditions</label>
           </div>
           <button
             className=' px-4 py-3 bg-indigo-500 rounded-md font-semibold text-white text-lg disabled:bg-gray-500'
             type='submit'
-            disabled={!state.term}
           >
             Submit
           </button>
